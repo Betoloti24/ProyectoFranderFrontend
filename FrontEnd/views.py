@@ -71,11 +71,16 @@ def registro(request):
         if (clave == veri_clave):
             # Obtén los datos del formulario (puedes obtenerlos de request.POST)
             datos_formulario = {
-                'correo': request.POST['email'],
-                'clave': request.POST['password'],
-                'clave': request.POST['password'],
-                'clave': request.POST['password'],
+                'cedula': request.POST['cedula'],
+                'nombre': request.POST['nombre'],
+                'apellido': request.POST['apellido'],
+                'f_nacimiento': request.POST['f_nacimiento'],
+                'genero': request.POST['genero'],
+                'telefono': request.POST['telefono'],
+                'correo': request.POST['correo'],
+                'clave_acceso': request.POST['clave_acceso'],
             }
+            print(datos_formulario)
         else:
             context = {
                 "error": True,
