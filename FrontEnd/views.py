@@ -123,3 +123,6 @@ def cambio_clave(request):
         }
     
     return render(request, "cambio_clave.html", context=context)
+
+def index(request):
+    return render(request, "index.html")
