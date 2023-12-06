@@ -8,12 +8,15 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}?{% now 'U' %}">
 </head>
 <header>
+    <nav>
+        <div class="logo"><a href="/tiendahyper/">Hyper</a></div>
+        <ul id="menu">
+            <li>Categorías</li>
 
-    </button>
+        </ul>
     </nav>
 </header>
 <body>
-    {% block body %}{% endblock %}
     <!-- Footer -->
     <footer id="main-footer" style="background: #253647; color: white;"></footer>
 </body>
