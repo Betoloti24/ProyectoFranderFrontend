@@ -60,12 +60,12 @@ def login(request):
 def registro(request):
     context = {
         "error": False,
-        "mensaje": "",
+        "mensaje": [],
         "data": {}
     }
     
     if request.method == "POST":
-        clave = request.POST['password']
+        clave = request.POST['clave_acceso']
         veri_clave = request.POST['confirm_password']
         
         if (clave == veri_clave):
@@ -80,13 +80,33 @@ def registro(request):
                 'correo': request.POST['correo'],
                 'clave_acceso': request.POST['clave_acceso'],
             }
-            print(datos_formulario)
+            
+            # Realiza la solicitud POST a tu API
+            url_api = 'http://127.0.0.1:8000/usuarios/registro/'
+            response = requests.post(url_api, data=datos_formulario)
+            
+            # Verifica el resultado de la solicitud
+            if response.status_code == 201:
+                # La solicitud fue exitosa
+                return HttpResponse('Formulario enviado correctamente')
+            
+            # capturamos el posible error
+            mensaje = [response.json()["mensaje"]]
+            data = response.json()["data"]
+            if (data):
+                mensaje.extend([f"{key.upper()}: {value[0]}" for key, value in data.items()])
+            context = {
+                "error": response.json()["error"],
+                "mensaje": mensaje,
+                "data": data,
+            }
         else:
             context = {
                 "error": True,
-                "mensaje": "Las contraseñas no coinciden",
+                "mensaje": ["Las contraseñas no coinciden"],
                 "data": {}
             }
+    len(context)
     
     return render(request, "register.html", context=context)
 
