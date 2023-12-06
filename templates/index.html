@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +10,9 @@
 </head>
 <header>
     <nav>
-        <div class="logo"><a href="/tiendahyper/">Hyper</a></div>
-        <ul id="menu">
-            <li>Categorías</li>
-
-        </ul>
+        <div class="logo">
+            <img src="{% static 'img/logoHyper.png' %}" alt="Logo de la tienda Hyper">
+        </div>
     </nav>
 </header>
 <body>
