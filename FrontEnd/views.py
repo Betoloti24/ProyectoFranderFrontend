@@ -9,39 +9,53 @@ def login(request):
     # declaramos el context
     context = {
         "error": False,
+        "cambio": False,
         "mensaje": "",
         "data": {}
     }
-    
+
     if request.method == "POST":
         # Obtén los datos del formulario (puedes obtenerlos de request.POST)
         datos_formulario = {
             'correo': request.POST['email'],
             'clave': request.POST['password'],
         }
-        # # Construye un diccionario con los archivos adjuntos (imágenes)
+        # Construye un diccionario con los archivos adjuntos (imágenes)
         # archivos = {'imagen': request.FILES['imagen']}
         # response = requests.post(url_api, data=datos_formulario, files=archivos)
 
-        # print(datos_formulario, archivos)
         # Realiza la solicitud POST a tu API
         url_api = 'http://127.0.0.1:8000/usuarios/inicio_sesion/'
         response = requests.get(url_api, data=datos_formulario)
-        print(response.json())
+
         # Verifica el resultado de la solicitud
         if response.status_code == 200:
             # La solicitud fue exitosa
             return HttpResponse('Formulario enviado correctamente')
         
-        # La solicitud no fue exitosa
-        
+        # capturamos el posible error
         context = {
             "error": response.json()["error"],
+            "cambio": False,
             "mensaje": response.json()["mensaje"],
             "data": response.json()["data"],
         }
-
-    return render(request, "login.html", context=context)
+        
+    # verificamos si hay un mensaje en las cookies
+    if (request.COOKIES.get("mensaje", None)):
+        context = {
+            "error": False,
+            "cambio": True,
+            "mensaje": request.COOKIES.get("mensaje"),
+            "data": {}
+        }
+    
+    # eliminamos las cookies si las hubo
+    http = render(request, "login.html", context=context)
+    if context["cambio"]:
+        http.delete_cookie("mensaje")  
+        
+    return http
 
 def registro(request):
     context = {
@@ -78,5 +92,29 @@ def cambio_clave(request):
         "mensaje": "",
         "data": {}
     }
+    
+    if request.method == "POST":
+        # extraemos los datos
+        datos_formulario = {
+            'correo': request.POST['email'],
+            'nueva_clave': request.POST['password'],
+        }
+        
+        # realizmos la solicitud
+        url_api = 'http://127.0.0.1:8000/usuarios/cambiar_clave/'
+        response = requests.put(url_api, data=datos_formulario)
+        
+        if response.status_code == 200:
+            # La solicitud fue exitosa
+            url = str(reverse_lazy("login"))
+            http = HttpResponseRedirect(url)
+            http.set_cookie("mensaje", "Cambio de clave exitoso")
+            return http
+        
+        context = {
+            "error": True,
+            "mensaje": response.json()["mensaje"],
+            "data": {}
+        }
     
     return render(request, "cambio_clave.html", context=context)

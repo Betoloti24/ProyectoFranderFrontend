@@ -24,7 +24,11 @@
         {% if error %}
             <p style="color: red; text-align: center;">{{ mensaje }}</p>
         {% endif %}
-        <a href="{% url 'cambio_clave' %}">¿Olvidó su contraseña?</a>
+
+        {% if cambio %}
+            <p style="color: green; text-align: center;">{{ mensaje }}</p>
+        {% endif %}
+        <a href="{% url 'cambio_clave' %}" style="text-align: center;">¿Olvidó su contraseña?</a>
         <p>¿Aún no tienes una cuenta? <a href="{% url 'registro' %}">Registrate ahora</a></p>
     </div>
 </body>
