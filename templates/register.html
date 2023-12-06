@@ -13,8 +13,15 @@
         <h1>Registrate</h1>
         <div id="text1">Registrate para poder disfrutar de la experiencia Hyper</p>
         <form id="login-form" method="post"> {% csrf_token %} 
-            <label for="name">Nombre: </label>
+
+            <label for="nombre">Nombre: </label>
             <input type="text" id="name" name="name" required><br>
+
+            <label for="apellido">Apellido: </label>
+            <input type="text" id="apellido" name="apellido" required><br>
+
+            <label for="fecha">Fecha de Nacimiento</label>
+            <input type="date" id="fecha" name="fecha"><br>
 
             <label for="email">Correo electrónico:</label>
             <input type="email" id="email" name="email" required>
