@@ -63,3 +63,30 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+.containerIndex {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    border-radius: 20%;
+    margin: 5%;
+    background-color: #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #333366;
+}
+
+.img{
+    display: block;
+    max-width: 10%;
+    height: auto;
+    float: left;
+    margin-left: 5%;
+    }
+
+.nav{
+    overflow: hidden;
+    background-color: #333366;
+    position: right;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    }

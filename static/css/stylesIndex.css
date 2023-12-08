@@ -1,0 +1,83 @@
+body {
+    font-family: 'Kumbh Sans';
+    line-height: 1.6;
+    background-color: #333366;
+}
+
+.container{
+    background-color: #fafafa;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #333666;
+    border-radius: 9px;
+}
+
+.nav{
+    display: flex;
+    justify-content: center;
+    padding: 4%;
+}
+
+.products{
+    display: flex;
+    justify-content: center;
+    padding: 4%;
+    }
+
+.product{
+    justify-content: left;
+    padding: 4%;
+    }
+
+.facturas{
+    margin-left: 6%;
+    margin-right: 6%;
+}
+
+.perfil{
+    margin-right: 6%;
+}
+
+.carrito{
+    margin-left: 6%;
+    margin-right: 6%;
+}
+
+.img{
+    display: block;
+    max-width: 10%;
+    height: auto;
+    float: left;
+    margin-left: 3%;
+}
+
+a{
+    text-decoration: none;
+    color: #333666;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+h2{
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fafafa;
+    background-color: #333666;
+    padding: 20px;
+    border-radius: 9px;
+}
+
+h3{
+    text-align: left;
+    font-size: 25px;
+    font-weight: bold;
+    color: #333666;
+}
+
+p{
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333666;
+    }

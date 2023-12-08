@@ -6,17 +6,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda Hyper</title>
     <link href='https://fonts.googleapis.com/css?family=Kumbh Sans' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}?{% now 'U' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesIndex.css' %}?{% now 'U' %}">
 </head>
-<header>
-    <nav>
-        <div class="logo">
-            <img src="{% static 'img/logoHyper.png' %}" alt="Logo de la tienda Hyper">
+    <body>
+        <div class="container">
+            <img class="img" src="{% static 'img/logoHyper.png' %}" alt="Logo de la tienda Hyper" width="10%">
+            <div class="nav">
+                <div class="perfil"> <a href="/profile">Perfil</a> </div>
+                <div class="facturas"><a href="/facturas">Facturas</a> </div>
+                <div class="carrito"> <a href="/carrito">Carrito</a> </div>
+            </div>
+            <section class="products">
+                <article class="product">
+                    <img src="{% static 'img/productos/1.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+                <article class="product">
+                    <img src="{% static 'img/productos/2.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+                <article class="product">
+                    <img src="{% static 'img/productos/3.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+                <article class="product">
+                    <img src="{% static 'img/productos/4.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+            </section>
+            <h2> También te podría gustar </h2>
+            <section class="products">
+                <article class="product">
+                    <img src="{% static 'img/productos/1.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+                <article class="product">
+                    <img src="{% static 'img/productos/2.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+                <article class="product">
+                    <img src="{% static 'img/productos/3.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+                <article class="product">
+                    <img src="{% static 'img/productos/4.jpg' %}" alt="img product">
+                    <h3>Name Product</h3>
+                    <p>Cost: --,--$</p>
+                </article>
+            </section>
         </div>
-    </nav>
-</header>
-<body>
-    <!-- Footer -->
-    <footer id="main-footer" style="background: #253647; color: white;"></footer>
+    </body>
+</html>
 </body>
 </html>

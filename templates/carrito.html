@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link href='https://fonts.googleapis.com/css?family=Kumbh Sans' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesVarios.css' %}?{% now 'U' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Carrito de Compras</h1>
+        </div>
+        <div class="content">
+            <div class="product-info">
+                <p>Nombre del Producto</p>
+                <p>Precio</p>
+                <p>Cantidad</p>
+                <p>Total</p>
+                <p>Eliminar</p>
+            </div>
+        </div>
+        <div class="total">
+            <h2>Total: xxx</h2>
+            <a href=""> Vaciar Carrito</a>
+        </div>
+    </div>
+</body>
+</html>
