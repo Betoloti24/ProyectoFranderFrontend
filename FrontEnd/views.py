@@ -150,7 +150,40 @@ def cambio_clave(request):
 
 # vista principal
 def index(request):
-    return render(request, "index.html")
+    # consultamos todos los productos
+    url_api = 'http://127.0.0.1:8000/ropas/'
+    response = requests.get(url_api)
+    products = response.json().get('data')
+    
+    if request.method == 'POST':
+        # extraemos los datos
+        cantidad = request.POST['cantidad']
+        id_ropa = request.POST['agregar']
+        datos_formulario = {
+            "cantidad": cantidad,
+            "id_usuario": 25845748,
+            "id_ropa": id_ropa
+        }
+        print(datos_formulario)
+
+
+
+    # dividimos la lista en segmentos de 4
+    list_products = []
+    list_aux = []
+    for indice, product in enumerate(products):
+        list_aux.append(product)
+        if (indice+1)%4 == 0:
+            list_products.append(list_aux)
+            list_aux = []
+    list_products.append(list_aux)
+
+    # definimos el contexto
+    context = {
+        'list_products': list_products
+    }
+
+    return render(request, "index.html", context=context)
 
 # vista perfil
 def perfil(request):

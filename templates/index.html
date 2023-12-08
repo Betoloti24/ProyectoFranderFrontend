@@ -16,28 +16,23 @@
                 <div class="facturas"><a href="{% url 'facturas' %}">Facturas</a> </div>
                 <div class="carrito"> <a href="{% url 'carrito' %}">Carrito</a> </div>
             </div>
-            <section class="products">
-                <article class="product">
-                    <img src="{% static 'img/productos/1.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-                <article class="product">
-                    <img src="{% static 'img/productos/2.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-                <article class="product">
-                    <img src="{% static 'img/productos/3.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-                <article class="product">
-                    <img src="{% static 'img/productos/4.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-            </section>
+            {% for sublist_products in list_products %}
+                <section class="products">
+                    {% for product in sublist_products %}
+                        <article class="product">
+                            <img src="http://127.0.0.1:8000/{{ product.imagen }}" alt="img product">
+                            <h3>{{product.nombre}}</h3>
+                            <form method="post">
+                                <p><b>{{product.precio_venta}}$</b></p> 
+                                <p><b>Cantidad: </b> <input style="width: 50px;" min="1" type="number" name="cantidad"></p> 
+                                <input type="hidden" name="agregar" value="{{ product.id }}">
+                                <button type="submit" style="font-size: 40px; padding: 0px">+</button>
+                            </form>
+                        </article>
+                    {% endfor %}
+                    <br>
+                </section>
+            {% endfor %}
             <h2> También te podría gustar </h2>
             <section class="products">
                 <article class="product">
