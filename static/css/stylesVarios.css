@@ -19,3 +19,29 @@ thead{
 th{
     padding: 10px;
 }
+.nav{
+    display: flex;
+    justify-content: center;
+    padding: 4%;
+}
+.facturas{
+    margin-left: 6%;
+    margin-right: 6%;
+}
+
+.perfil{
+    margin-right: 6%;
+}
+
+.carrito{
+    margin-left: 6%;
+    margin-right: 6%;
+}
+
+.img{
+    display: block;
+    max-width: 10%;
+    height: auto;
+    float: left;
+    margin-left: 3%;
+}

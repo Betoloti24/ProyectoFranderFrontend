@@ -10,6 +10,12 @@
 </head>
 <body>
     <div class="container">
+        <img class="img" src="{% static 'img/logoHyper.png' %}" alt="Logo de la tienda Hyper" width="10%">
+        <div class="nav">
+            <div class="perfil"> <a href="{% url 'index' %}">Inicio</a> </div>
+            <div class="facturas"><a href="{% url 'perfil' %}">Perfil</a> </div>
+            <div class="carrito"> <a href="{% url 'carrito' %}">Carrito</a> </div>
+        </div>
         <div class="header">
             <h1>Facturas</h1>
         </div>
@@ -24,14 +30,16 @@
                         <th>Fecha de compra</th>
                         <th>Total</th>
                     </tr>
+                    {% for factura in facturas %}
                     <tr>
-                        <th>xxxx</th>
-                        <th>xxxx</th>
-                        <th>xxxx</th>
-                        <th>xxxx</th>
-                        <th>xxxx</th>
-                        <th>xxxxx</th>
+                        <th>{{ nombre }}</th>
+                        <th>{{ apellido }}</th>
+                        <th>{{ telefono }}</th>
+                        <th>{{ correo }}</th>
+                        <th>{{ factura.f_facturacion }}</th>
+                        <th>{{ factura.monto_total }}$</th>
                     </tr>
+                    {% endfor %}
                 </thead>
             </table>
         </div>

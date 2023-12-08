@@ -12,9 +12,9 @@
         <div class="container">
             <img class="img" src="{% static 'img/logoHyper.png' %}" alt="Logo de la tienda Hyper" width="10%">
             <div class="nav">
-                <div class="perfil"> <a href="/profile">Perfil</a> </div>
-                <div class="facturas"><a href="/facturas">Facturas</a> </div>
-                <div class="carrito"> <a href="/carrito">Carrito</a> </div>
+                <div class="perfil"> <a href="{% url 'perfil' %}">Perfil</a> </div>
+                <div class="facturas"><a href="{% url 'facturas' %}">Facturas</a> </div>
+                <div class="carrito"> <a href="{% url 'carrito' %}">Carrito</a> </div>
             </div>
             <section class="products">
                 <article class="product">

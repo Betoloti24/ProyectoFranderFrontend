@@ -2,8 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 import requests
-# Importamos el revace_lacy
-
 
 def login(request):
     # declaramos el context
@@ -31,7 +29,10 @@ def login(request):
         # Verifica el resultado de la solicitud
         if response.status_code == 200:
             # La solicitud fue exitosa
-            return HttpResponse('Formulario enviado correctamente')
+            url = str(reverse_lazy("index"))
+            http = HttpResponseRedirect(url)
+            http.set_cookie('usuario', response.json().get('data').get('cedula'))
+            return http
         
         # capturamos el posible error
         context = {
@@ -88,7 +89,10 @@ def registro(request):
             # Verifica el resultado de la solicitud
             if response.status_code == 201:
                 # La solicitud fue exitosa
-                return HttpResponse('Formulario enviado correctamente')
+                url = str(reverse_lazy("index"))
+                http = HttpResponseRedirect(url)
+                http.set_cookie('usuario', datos_formulario.get('cedula'))
+                return http
             
             # capturamos el posible error
             mensaje = [response.json()["mensaje"]]
@@ -144,5 +148,67 @@ def cambio_clave(request):
     
     return render(request, "cambio_clave.html", context=context)
 
+# vista principal
 def index(request):
     return render(request, "index.html")
+
+# vista perfil
+def perfil(request):
+
+    context = {
+        'mensaje': None
+    }
+
+    # actualizamos las preferencias si se envia una peticion
+    if request.method == 'POST':
+        # obtenemos las preferencias
+        preferencias = list(map(lambda x: int(x), request.POST.getlist('categoria')))
+        # guardamos las preferencias
+        datos = {
+            'preferencias': preferencias
+        }
+        url_api = f'http://127.0.0.1:8000/usuarios/cambiar_preferencias/{request.COOKIES.get("usuario")}/'
+        response = requests.put(url_api, data=datos)
+        context['mensaje'] = response.json().get('mensaje')
+
+    # realizmos la solicitud
+    url_api = f'http://127.0.0.1:8000/usuarios/{request.COOKIES.get("usuario")}/'
+    response = requests.get(url_api)
+    data_usuario = response.json().get('data')
+    
+    # creamos el contexto
+    context.update(data_usuario)
+
+    # consultamos las categorias
+    url_api = f'http://127.0.0.1:8000/categorias/'
+    response = requests.get(url_api)
+    list_categorias = response.json().get('data')
+
+    # definimos el contexto
+    context['categorias'] = list_categorias
+
+    # context = 
+    return render(request, "profile.html", context=context)
+
+# vista carrito
+def carrito(request):
+    
+    return render(request, "carrito.html")
+
+# vista facturas
+def facturas(request):
+    # consultamos el usuario
+    url_api = f'http://127.0.0.1:8000/usuarios/{request.COOKIES["usuario"]}/'
+    response = requests.get(url_api)
+    usuario = response.json().get('data')
+
+    # vemos las facturas del usuario
+    url_api = f'http://127.0.0.1:8000/facturas/{request.COOKIES["usuario"]}/'
+    response = requests.get(url_api)
+    list_facturas = response.json().get('data')
+
+    # creamos el context
+    context = usuario
+    context['facturas'] = list_facturas
+
+    return render(request, "facturas.html", context=context)

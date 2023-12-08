@@ -81,3 +81,14 @@ p{
     font-weight: bold;
     color: #333666;
     }
+
+button {
+    width: 300px;
+    padding: 10px;
+    background-color: #333366;
+    color: #ddd;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Kumbh Sans';
+}

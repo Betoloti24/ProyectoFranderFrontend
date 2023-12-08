@@ -10,16 +10,44 @@
 </head>
 <body>
     <div class="container">
+        <img class="img" src="{% static 'img/logoHyper.png' %}" alt="Logo de la tienda Hyper" width="10%">
+        <div class="nav">
+            <div class="perfil"> <a href="{% url 'index' %}">Inicio</a> </div>
+            <div class="facturas"><a href="{% url 'facturas' %}">Facturas</a> </div>
+            <div class="carrito"> <a href="{% url 'carrito' %}">Carrito</a> </div>
+        </div>
         <div class="header">
             <h1>Perfil de Usuario</h1>
         </div> 
         <div class="content">
             <div class="user-info">
-                <h2>Nombre y Apellido</h2>
-                <p>Correo electrónico</p>
-                <p>Numero de cedula</p>
-                <p>Género</p>
+                <h2>{{ nombre }} y {{ apellido }}</h2>
+                <div class="header">
+                    <h3>Datos Generales:</h3>
+                </div>
+                <p>Numero de Cedula: {{ cedula }}</p>
+                <p>Género: {{ genero }}</p>
+                <p>Fecha de Nacimiento: {{ f_nacimiento }}</p>
+                <p>Correo Electrónico: {{ correo }}</p>
+                <p>Teléfono: {{ telefono }}</p>
             </div>
+            <form method="post">{% csrf_token %}
+                <div class="header">
+                    <h3>Prefencias:</h3>
+                </div>
+                {% if error %}
+                    <p style="color: red; text-align: center;">{{ mensaje }}</p>
+                {% endif %}
+                {% if mensaje and not error %}
+                    <p style="color: green; text-align: center;">{{ mensaje }}</p>
+                {% endif %}
+                <p>
+                {% for categoria in categorias %}
+                    <input type="checkbox" name="categoria" value="{{ categoria.id }}" {% if categoria.id in preferencias %}checked{% endif %}> <label for="categoria">{{ categoria.nombre }}</label>
+                {% endfor %}
+                </p>
+                <button type="submit">Actualizar Preferencias</button>
+            </form>
         </div>  
     </div> 
 </body>
