@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from .functions import segmentar
 import requests
 
 def login(request):
@@ -150,44 +151,76 @@ def cambio_clave(request):
 
 # vista principal
 def index(request):
+    # definimos el contexto
+    context = {}
+    
     # consultamos todos los productos
+    ## todos los productos
     url_api = 'http://127.0.0.1:8000/ropas/'
     response = requests.get(url_api)
     products = response.json().get('data')
-    
+    ## recomendaciones por preferencias
+    url_api = f'http://127.0.0.1:8000/recomendaciones/preferencias_usuario/{request.COOKIES.get("usuario")}/'
+    response = requests.get(url_api)
+    products_preferencias = response.json().get('data')
+    ## recomendaciones de otros usuarios
+    url_api = f'http://127.0.0.1:8000/recomendaciones/preferencias_otros_usuario/{request.COOKIES.get("usuario")}/'
+    response = requests.get(url_api)
+    products_preferencias_otros_usuarios = response.json().get('data')
+    ## recomendaciones de prendas mas vendidas
+    url_api = f'http://127.0.0.1:8000/recomendaciones/prendas_mas_vendidas/'
+    response = requests.get(url_api)
+    products_mas_vendidos = response.json().get('data')
+        
     if request.method == 'POST':
-        # extraemos los datos
-        cantidad = request.POST['cantidad']
-        id_ropa = request.POST['agregar']
-        datos_formulario = {
-            "cantidad": cantidad,
-            "id_usuario": 25845748,
-            "id_ropa": id_ropa
-        }
-        print(datos_formulario)
-
-
-
-    # dividimos la lista en segmentos de 4
-    list_products = []
-    list_aux = []
-    for indice, product in enumerate(products):
-        list_aux.append(product)
-        if (indice+1)%4 == 0:
-            list_products.append(list_aux)
-            list_aux = []
-    list_products.append(list_aux)
-
-    # definimos el contexto
-    context = {
-        'list_products': list_products
-    }
+        try: 
+            # extraemos los datos
+            cantidad = request.POST['cantidad']
+            id_ropa = request.POST['agregar']
+            datos_formulario = {
+                "cantidad": int(cantidad),
+                "id_usuario": request.COOKIES.get("usuario"),
+                "id_ropa": int(id_ropa)
+            }
+            
+            # agregamos al carrito
+            url_api = 'http://127.0.0.1:8000/carritos/'
+            response = requests.post(url_api, data=datos_formulario)
+            
+            if response.status_code == 201:
+                context['mensaje'] = response.json().get('mensaje')
+            else:
+                # actualizamos la cantidad
+                datos_formulario.pop('id_usuario')
+                url_api = f'http://127.0.0.1:8000/carritos/{request.COOKIES.get("usuario")}/'
+                response = requests.put(url_api, data=datos_formulario)
+                context['mensaje'] = response.json().get('mensaje')
+        except Exception as e:
+            context['error'] = "Ingrese una cantidad para agregar en el carrito"
+        
+    # dividimos la lista de productos en segmentos de 4
+    products = segmentar(4, products)
+    context['list_products'] = products
+    
+    # dividimos la lista de productos recomendados por las preferencias en segmentos de 4
+    if products_preferencias:
+        products_preferencias = segmentar(4, products_preferencias)
+        context['list_products_preferences'] = products_preferencias
+    
+    # dividimos la lista de productos recomendados por otros usuarios en segmentos de 4
+    if products_preferencias_otros_usuarios:
+        products_preferencias_otros_usuarios = segmentar(4, products_preferencias_otros_usuarios)
+        context['list_products_preferences_others_user'] = products_preferencias_otros_usuarios
+    
+    # dividimos la lista de productos mas recomendados en segmentos de 4
+    if products_mas_vendidos:
+        products_mas_vendidos = segmentar(4, products_mas_vendidos)
+        context['list_products_mas_vendidos'] = products_mas_vendidos
 
     return render(request, "index.html", context=context)
 
 # vista perfil
 def perfil(request):
-
     context = {
         'mensaje': None
     }
@@ -225,8 +258,52 @@ def perfil(request):
 
 # vista carrito
 def carrito(request):
+    # declaramos el contexto
+    context = {}
     
-    return render(request, "carrito.html")
+    # validamos las peticiones
+    if request.method == 'POST':
+        if request.POST.get('pagar', None) is not None:
+            print(request.POST.get('pagar', None))
+            # pagamos el carrito del usuario
+            url_api = f'http://127.0.0.1:8000/carritos/pagar/{request.COOKIES.get("usuario")}/'
+            response = requests.put(url_api)
+            context['mensaje'] = response.json().get('mensaje')
+        elif request.POST.get('eliminar', None):
+            # eliminamos un producto del carrito
+            id_ropa = request.POST['eliminar']
+            url_api = f'http://127.0.0.1:8000/carritos/{request.COOKIES.get("usuario")}/{id_ropa}/'
+            response = requests.delete(url_api)
+            context['mensaje'] = response.json().get('mensaje')
+            
+            
+            
+    # consultamos el carrito del usuario
+    url_api = f'http://127.0.0.1:8000/carritos/{request.COOKIES["usuario"]}/'
+    response = requests.get(url_api)
+    list_carrito = response.json().get('data')
+    # consultamos los productos
+    url_api = f'http://127.0.0.1:8000/ropas/'
+    response = requests.get(url_api)
+    list_producto = response.json().get('data') 
+    
+    # calculamos los totales y guardamos los productos
+    total = 0
+    carrito = []
+    for item in list_carrito:
+        producto = list(filter(lambda x: x.get('id') == item.get('id_ropa'), list_producto))[0]
+        producto['cantidad'] = item.get('cantidad')
+        producto['subtotal'] = float(producto.get('precio_venta')) * producto.get('cantidad')
+        total += producto.get('subtotal')
+        carrito.append(producto)
+    context['total'] = total
+    
+    # dividimos el carrito en segmentos de 4
+    if carrito:
+        carrito = segmentar(4, carrito)
+    context['carrito'] = carrito
+    
+    return render(request, "carrito.html", context=context)
 
 # vista facturas
 def facturas(request):

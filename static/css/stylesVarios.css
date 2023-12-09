@@ -45,3 +45,26 @@ th{
     float: left;
     margin-left: 3%;
 }
+.products{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+}
+
+.product{
+    justify-content: center;
+    padding: 0px 20px; 
+}
+
+button {
+    width: 300px;
+    padding: 10px;
+    background-color: #333366;
+    color: #ddd;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Kumbh Sans';
+}

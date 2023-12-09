@@ -15,22 +15,38 @@
             <div class="perfil"> <a href="{% url 'index' %}">Inicio</a> </div>
             <div class="facturas"><a href="{% url 'perfil' %}">Perfil</a> </div>
             <div class="carrito"> <a href="{% url 'facturas' %}">Facturas</a> </div>
+            <div class="carrito"> <a href="{% url 'login' %}">Cerrar Sesion</a> </div>
         </div>
         <div class="header">
             <h1>Carrito de Compras</h1>
         </div>
-        <div class="content">
-            <div class="product-info">
-                <p>Nombre del Producto</p>
-                <p>Precio</p>
-                <p>Cantidad</p>
-                <p>Total</p>
-                <p>Eliminar</p>
-            </div>
-        </div>
+        {% if mensaje %}
+            <p style="color: green; text-align: center;">{{ mensaje }}</p>
+        {% endif %}
+        {% for sublist_products in carrito %} 
+            <section class="products">
+                {% for product in sublist_products %}
+                    <article class="product">
+                        <img src="http://127.0.0.1:8000/{{ product.imagen }}" alt="img product">
+                        <h3>{{product.nombre}}</h3>
+                        <p><b>Cantidad: </b> {{ product.cantidad }} </p> 
+                        <p><b>SubTotal: </b> {{ product.subtotal }}$</p> 
+                        <form method="post"> {% csrf_token %}
+                            <input type="hidden" name="eliminar" value="{{ product.id }}">
+                            <button type="submit" style="font-size: 20px; padding: 5px 0px">Eliminar</button>
+                        </form>
+                    </article>
+                {% endfor %}
+            </section>
+        {% endfor %}
         <div class="total">
-            <h2>Total: xxx</h2>
-            <a href=""> Vaciar Carrito</a>
+            <h2>
+                Total: {{total}}
+                <form method="post"> {% csrf_token %}
+                    <input type="hidden" name="pagar">
+                    <button type="submit" style="font-size: 20px; padding: 5px 0px; width: 200px; margin: 0 0 0 15px">Pagar Carrito</button>
+                </form>
+            </h2>
         </div>
     </div>
 </body>

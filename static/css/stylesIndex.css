@@ -94,3 +94,9 @@ button {
     cursor: pointer;
     font-family: 'Kumbh Sans';
 }
+
+hr{
+    border: 2px solid #333666;
+    
+
+}

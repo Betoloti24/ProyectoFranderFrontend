@@ -15,47 +15,96 @@
                 <div class="perfil"> <a href="{% url 'perfil' %}">Perfil</a> </div>
                 <div class="facturas"><a href="{% url 'facturas' %}">Facturas</a> </div>
                 <div class="carrito"> <a href="{% url 'carrito' %}">Carrito</a> </div>
+                <div class="carrito"> <a href="{% url 'login' %}">Cerrar Sesion</a> </div>
             </div>
-            {% for sublist_products in list_products %}
+            {% if error %}
+                <p style="color: red; text-align: center;">{{ error }}</p>
+            {% endif %}
+            {% if mensaje %}
+                <p style="color: green; text-align: center;">{{ mensaje }}</p>
+            {% endif %}
+            {% for sublist_products in list_products %} 
                 <section class="products">
                     {% for product in sublist_products %}
                         <article class="product">
                             <img src="http://127.0.0.1:8000/{{ product.imagen }}" alt="img product">
                             <h3>{{product.nombre}}</h3>
-                            <form method="post">
+                            <form method="post"> {% csrf_token %}
                                 <p><b>{{product.precio_venta}}$</b></p> 
                                 <p><b>Cantidad: </b> <input style="width: 50px;" min="1" type="number" name="cantidad"></p> 
                                 <input type="hidden" name="agregar" value="{{ product.id }}">
-                                <button type="submit" style="font-size: 40px; padding: 0px">+</button>
+                                <button type="submit" style="font-size: 20px; padding: 5px 0px">Agregar</button>
                             </form>
                         </article>
                     {% endfor %}
-                    <br>
                 </section>
             {% endfor %}
-            <h2> También te podría gustar </h2>
-            <section class="products">
-                <article class="product">
-                    <img src="{% static 'img/productos/1.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-                <article class="product">
-                    <img src="{% static 'img/productos/2.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-                <article class="product">
-                    <img src="{% static 'img/productos/3.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-                <article class="product">
-                    <img src="{% static 'img/productos/4.jpg' %}" alt="img product">
-                    <h3>Name Product</h3>
-                    <p>Cost: --,--$</p>
-                </article>
-            </section>
+
+            {% if list_products_preferences or list_products_preferences_others_user or list_products_mas_vendidos %}
+                <h2> También te podría gustar </h2>
+                {% if list_products_preferences %}
+                    <hr>
+                    <h3 style="text-align: center;">Prendas de tus Preferencias</h3>
+                    {% for sublist_products in list_products_preferences %} 
+                        <section class="products">
+                            {% for product in sublist_products %}
+                                <article class="product">
+                                    <img src="http://127.0.0.1:8000/{{ product.imagen }}" alt="img product">
+                                    <h3>{{product.nombre}}</h3>
+                                    <form method="post"> {% csrf_token %}
+                                        <p><b>{{product.precio_venta}}$</b></p> 
+                                        <p><b>Cantidad: </b> <input style="width: 50px;" min="1" type="number" name="cantidad"></p> 
+                                        <input type="hidden" name="agregar" value="{{ product.id }}">
+                                        <button type="submit" style="font-size: 20px; padding: 5px 0px">Agregar</button>
+                                    </form>
+                                </article>
+                            {% endfor %}
+                        </section>
+                    {% endfor %}
+                {% endif %}
+
+                {% if list_products_preferences_others_user %}
+                    <hr>
+                    <h3 style="text-align: center;">Prendas Recomendadas por Otros Usuarios</h3>
+                    {% for sublist_products in list_products_preferences_others_user %} 
+                        <section class="products">
+                            {% for product in sublist_products %}
+                                <article class="product">
+                                    <img src="http://127.0.0.1:8000/{{ product.imagen }}" alt="img product">
+                                    <h3>{{product.nombre}}</h3>
+                                    <form method="post"> {% csrf_token %}
+                                        <p><b>{{product.precio_venta}}$</b></p> 
+                                        <p><b>Cantidad: </b> <input style="width: 50px;" min="1" type="number" name="cantidad"></p> 
+                                        <input type="hidden" name="agregar" value="{{ product.id }}">
+                                        <button type="submit" style="font-size: 20px; padding: 5px 0px">Agregar</button>
+                                    </form>
+                                </article>
+                            {% endfor %}
+                        </section>
+                    {% endfor %}
+                {% endif %}
+
+                {% if list_products_mas_vendidos %}
+                    <hr>
+                    <h3 style="text-align: center;">Top 5 de Prendas</h3>
+                    {% for sublist_products in list_products_mas_vendidos %} 
+                        <section class="products">
+                            {% for product in sublist_products %}
+                                <article class="product">
+                                    <img src="http://127.0.0.1:8000/{{ product.imagen }}" alt="img product">
+                                    <h3>{{product.nombre}}</h3>
+                                    <form method="post"> {% csrf_token %}
+                                        <p><b>{{product.precio_venta}}$</b></p> 
+                                        <p><b>Cantidad: </b> <input style="width: 50px;" min="1" type="number" name="cantidad"></p> 
+                                        <input type="hidden" name="agregar" value="{{ product.id }}">
+                                        <button type="submit" style="font-size: 20px; padding: 5px 0px">Agregar</button>
+                                    </form>
+                                </article>
+                            {% endfor %}
+                        </section>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
         </div>
     </body>
 </html>
